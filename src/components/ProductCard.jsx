@@ -69,7 +69,7 @@ const ProductCard = ({
         </div>
 
         <div className="flex items-center justify-between">
-          {specialPrice ? (
+          {specialPrice != price ? (
             <div className="flex flex-col">
               <span className="text-gray-400 line-through">
                 ${Number(price).toFixed(2)}
@@ -79,7 +79,7 @@ const ProductCard = ({
               </span>
             </div>
           ) : (
-            <span className="text-gray-700">
+            <span className="text-xl font-bold text-slate-700">
               {"   "}${Number(price).toFixed(2)}
             </span>
           )}

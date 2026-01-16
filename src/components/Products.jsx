@@ -1,41 +1,32 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ProductCard from "./ProductCard";
 import { FaExclamationTriangle } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchCategories } from "../store/actions";
+import Filter from "./Filter";
+import useProductFilter from "./useProductFilter";
+import Loader from "./Loader";
 
 const Products = () => {
-  const errorMessage = "";
-  const isLoading = false;
-  const products = [
-    {
-      productId: 652,
-      productName: "Iphone Xs max",
-      image: "https://placehold.co/600x400",
-      description:
-        "Experience the latest in mobile technology with advanced cameras, powerful processing, and an all-day battery.",
-      quantity: 2,
-      price: 1450.0,
-      discount: 10.0,
-      specialPrice: 1305.0,
-    },
-    {
-      productId: 654,
-      productName: "MacBook Air M2s",
-      image: "https://placehold.co/600x400",
-      description:
-        "Ultra-thin laptop with Apple's M2 chip, providing fast performance in a lightweight, portable design.",
-      quantity: 0,
-      price: 2550.0,
-      discount: 20.0,
-      specialPrice: 2040.0,
-    },
-  ];
+  const { isLoading, errorMessage } = useSelector((state) => state.errors);
+  const { products, categories, pagination } = useSelector(
+    (state) => state.products
+  );
+
+  const dispatch = useDispatch();
+  useProductFilter();
+
+  useEffect(() => {
+    dispatch(fetchCategories());
+  }, [dispatch]);
 
   return (
     <div className="lg:px-14 sm:px-8 px-4 py-14 2xl:w-[90%] 2xl:mx-auto">
+      <Filter categories={categories} />
       {isLoading ? (
-        <p>It is loading...</p>
+        <Loader text={"Products Loading..."} />
       ) : errorMessage ? (
-        <div className="flex justify-center item-center h-[200px]">
+        <div className="flex justify-center item-center h-50">
           <FaExclamationTriangle className="text-slate-800 text-3xl mr-2" />
           <span className="text-shadow-slate-800 text-lg font-medium">
             {errorMessage}
