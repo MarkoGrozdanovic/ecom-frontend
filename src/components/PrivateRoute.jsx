@@ -4,10 +4,9 @@ import { Navigate, Outlet, useLocation } from "react-router-dom";
 
 const PrivateRoute = ({ publicPage = false, adminOnly = false }) => {
   const { user } = useSelector((state) => state.auth);
-  console.log("user: " + user);
 
   if (publicPage) {
-    return user ? <Navigate to="/profile" /> : <Outlet />;
+    return user ? <Navigate to="/" /> : <Outlet />;
   }
 
   return user ? <Outlet /> : <Navigate to="/login" />;
