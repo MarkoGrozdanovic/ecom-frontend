@@ -2,11 +2,14 @@ import { DataGrid } from "@mui/x-data-grid";
 import { adminOrderTableColumn } from "../../helper/tableColumn";
 import { useState } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import Modal from "../../shared/Modal";
+import UpdateOrderForm from "./UpdateOrderForm";
 
 const OrderTable = ({ adminOrders, pagination }) => {
   const navigate = useNavigate();
   const [updateOpenModal, setUpdateOpenModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState("");
+  const [loader, setLoader] = useState(false);
   const [currentPage, setCurrentPage] = useState(
     pagination?.pageNumber + 1 || 1,
   );
@@ -63,6 +66,21 @@ const OrderTable = ({ adminOrders, pagination }) => {
           hideNextButton: currentPage === pagination?.totalPages,
         }}
       />
+
+      <Modal
+        open={updateOpenModal}
+        setOpen={setUpdateOpenModal}
+        title="Update Order Status"
+      >
+        <UpdateOrderForm
+          setOpen={setUpdateOpenModal}
+          open={updateOpenModal}
+          loader={loader}
+          setLoader={setLoader}
+          selectedId={selectedItem.id}
+          selectedItem={selectedItem}
+        />
+      </Modal>
     </div>
   );
 };
