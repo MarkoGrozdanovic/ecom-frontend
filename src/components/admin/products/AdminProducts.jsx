@@ -12,6 +12,8 @@ import DeleteModal from "../../shared/DeleteModal";
 import { deleteProduct } from "../../../store/actions";
 import toast from "react-hot-toast";
 import ImageUploadForm from "./ImageUploadForm";
+import ProductViewModal from "../../shared/ProductViewModal";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 
 const AdminProducts = () => {
   // const products = [
@@ -79,8 +81,14 @@ const AdminProducts = () => {
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
   const [openAddModal, setOpenAddModal] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [openProductViewModal, setOpenProductViewModal] = useState(false);
   const [openImageUploadModal, setOpenImageUploadModal] = useState(false);
   const [loader, setLoader] = useState(false);
+
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const params = new URLSearchParams(searchParams);
+  const pathname = useLocation().pathname;
 
   const [currentPage, setCurrentPage] = useState(
     pagination?.pageNumber + 1 || 1,
@@ -116,9 +124,17 @@ const AdminProducts = () => {
     setOpenImageUploadModal(true);
   };
 
-  const handleProductView = (product) => {};
+  const handleProductView = (product) => {
+    setSelectedProduct(product);
+    setOpenProductViewModal(true);
+  };
 
-  const handlePaginationChange = () => {};
+  const handlePaginationChange = (paginationModel) => {
+    const page = paginationModel.page + 1;
+    setCurrentPage(page);
+    params.set("page", page.toString());
+    navigate(`${pathname}?${params}`);
+  };
 
   const onDeleteHandler = () => {
     dispatch(
@@ -224,6 +240,12 @@ const AdminProducts = () => {
         onDeleteHandler={onDeleteHandler}
         loader={loader}
       ></DeleteModal>
+
+      <ProductViewModal
+        open={openProductViewModal}
+        setOpen={setOpenProductViewModal}
+        product={selectedProduct}
+      />
     </div>
   );
 };

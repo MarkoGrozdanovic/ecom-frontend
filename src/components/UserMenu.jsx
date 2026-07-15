@@ -15,6 +15,8 @@ const UserMenu = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const isAdmin = user && user?.roles.includes("ROLE_ADMIN");
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -60,6 +62,15 @@ const UserMenu = () => {
             <span className="font-semibold">Order</span>
           </MenuItem>
         </Link>
+
+        {isAdmin && (
+          <Link to="admin">
+            <MenuItem className="flex gap-2" onClick={handleClose}>
+              <FaUserShield className="text-xl" />
+              <span className="font-semibold">Admin Panel</span>
+            </MenuItem>
+          </Link>
+        )}
 
         <MenuItem className="flex gap-2" onClick={logOutHandler}>
           <div className="font-semibold w-full flex gap-2 items-center bg-button-gradient px-4 py-1 text-white rounded-sm">

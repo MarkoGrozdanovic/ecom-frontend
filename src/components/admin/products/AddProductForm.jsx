@@ -7,6 +7,7 @@ import { Button } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import {
+  addNewProductFromDashboard,
   fetchCategories,
   updateProductFromDashboard,
 } from "../../../store/actions";
@@ -34,6 +35,14 @@ const AddProductForm = ({ setOpen, product, update }) => {
   const saveProductHandler = (data) => {
     if (!update) {
       // create new product logic
+
+      const sendData = {
+        ...data,
+        categoryId: selectedCategory.categoryId,
+      };
+      dispatch(
+        addNewProductFromDashboard(sendData, toast, reset, setLoader, setOpen),
+      );
     } else {
       const sendData = {
         ...data,
@@ -63,10 +72,10 @@ const AddProductForm = ({ setOpen, product, update }) => {
   }, [dispatch, update]);
 
   useEffect(() => {
-    if (!categories) {
+    if (!categoryLoader && categories) {
       setSelectedCategory(categories[0]);
     }
-  }, [categories]);
+  }, [categories, categoryLoader]);
 
   if (categoryLoader) {
     <Skeleton />;
@@ -169,6 +178,7 @@ const AddProductForm = ({ setOpen, product, update }) => {
                 ? "border-red-500"
                 : "border-slate-700"
             }`}
+            maxLength={255}
             {...register("description", {
               required: {
                 value: true,
@@ -201,7 +211,7 @@ const AddProductForm = ({ setOpen, product, update }) => {
             color="primary"
             className="bg-custom-blue text-white py-2.5 px-4 text-sm font-medium "
           >
-            {loader ? <Spinners /> : "Update"}
+            {loader ? <Spinners /> : "Save"}
           </Button>
         </div>
       </form>
